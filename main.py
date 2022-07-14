@@ -28,7 +28,7 @@ def vectorize_cosine(data):
     return similarity
 
 #function to recommend movie
-def recommend(movie_title,similarity,model_df,num_of_rec=10):
+def recommend(movie_title,similarity,model_df,num_of_rec):
     movie_indices=pd.Series(model_df.index,model_df['title']).drop_duplicates()
     #index of movie
     index=movie_indices[str(movie_title).title()]
@@ -97,13 +97,13 @@ def main():
 
     elif choice=='Recommend':
         st.subheader('Recommend Movies')
-        num_of_rec = st.sidebar.number_input("Number",4,30,7)
+        num_of_rec = st.sidebar.number_input("Number",1,30)
         similarity=vectorize_cosine(model_df)
         search_term=st.text_input('Search Movie')
         if st.button('Recommend'):
             if search_term!= None:
                 try:
-                    result=recommend(search_term,similarity,model_df)
+                    result=recommend(search_term,similarity,model_df,num_of_rec=num_of_rec)
                     with st.expander("Results as JSON"):
                         results_json = result.to_dict('index')
                         st.write(results_json)
@@ -119,9 +119,9 @@ def main():
                         stc.html(RESULT_TEMP.format(rec_title,rec_type,rec_desc,rec_gen,rec_year,rec_imdb),height=350)		
                     
                 except :
-                    result='Not Found'
+                    result='Not in Database'
                     st.warning(result)
-                    st.info("Suggested Options include")
+                    st.info("Suggested Movies include")
                     result_df = search_term_if_not_found(search_term,model_df)
                     for row in result_df.iterrows():
                         rec_title = row[1][1]
