@@ -43,18 +43,6 @@ def recommend(movie_title,similarity,model_df,num_of_rec):
     return result_df.head(num_of_rec)
 
 
-
-#function to suggest other movies if query not in dataset
-@st.cache
-def search_term_if_not_found(term,model_df=model_df):
-    term=term.lower()
-    result_df = model_df[model_df['title'].astype('str').apply(lambda x:x.lower()).str.contains(term)]
-    if result_df.shape[0]==0:
-        #st.info('Not in database')
-        result_df=model_df.head(10)
-    return result_df
-
-
 #main function
 def main():
     #title
@@ -83,7 +71,6 @@ def main():
         
         if st.button('Recommend'):
             if search_term!= None:
-                try:
                     result=recommend(search_term,similarity,model_df,num_of_rec=num_of_rec)
 						
                     for row in result.iterrows():
@@ -96,39 +83,19 @@ def main():
 
                         movie_ttl=movie.get_movie(title=str(rec_title))
                         col1,col2=st.columns([1,2])
-                        with col1:
-                            st.image(movie_ttl['poster'])
-                        with col2:
-                            st.subheader(movie_ttl['title'])
-                            st.caption(f"Genre: {rec_gen} \n ; Year: {rec_year} ")
-                            st.write(rec_desc)
-                            st.text(f"Imdb Rating: {rec_imdb}")
-                            st.progress(float(rec_imdb)/10)
 
-
-                    
-                except :
-                    result='Not in Database'
-                    st.warning(result)
-                    st.info("Suggested Movies include")
-                    result_df = search_term_if_not_found(search_term,model_df)
-                    for row in result_df.iterrows():
-                        rec_title = row[1][1]
-                        rec_type = row[1][2]
-                        rec_desc = row[1][3]
-                        rec_gen  = row[1][7]
-                        rec_year = row[1][4]
-                        rec_imdb = row[1][-3]
-                        movie_ttl=movie.get_movie(title=str(rec_title))
-                        col1,col2=st.columns([1,2])
-                        with col1:
-                            st.image(movie_ttl['poster'])
-                        with col2:
-                            st.subheader(movie_ttl['title'])
-                            st.caption(f"Genre: {rec_gen} \n;  Year: {rec_year} ")
-                            st.write(rec_desc)
-                            st.text(f"Imdb Rating: {rec_imdb}")
-                            st.progress(float(rec_imdb)/10)
+                        try:
+                            with col1:
+                                    st.image(movie_ttl['poster'])
+                            with col2:
+                                st.subheader(movie_ttl['title'])
+                                st.caption(f"Genre: {rec_gen} \n ; Year: {rec_year} ")
+                                st.write(rec_desc)
+                                st.text(f"Imdb Rating: {rec_imdb}")
+                                st.progress(float(rec_imdb)/10)
+                        except:
+                            pass
+            
 
 
     elif choice == "Visualizations":
