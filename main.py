@@ -51,7 +51,7 @@ page_bg_img = '''
 '''
 
 RESULT_TEMP = """
-<div style="width:90%;height:100%;margin:1px;padding:5px;position:relative;border-radius:5px;border-bottom-right-radius: 60px;
+<div style="width:90%;height:100%;margin:1px;padding:5px;position:relative;border-radius:5px;border-bottom-right-radius: 80px;
 box-shadow:0 0 20px 5px #c000000; background-color:#db7093;
   border-left: 5px solid #6c6c6c;">
 <h4>{}</h4>
