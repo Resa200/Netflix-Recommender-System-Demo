@@ -1,7 +1,7 @@
 #importing necessary libraries
 import streamlit as st
 import streamlit.components.v1 as stc
-import difflib
+from omdbapi.movie_search import GetMovie
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -10,6 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+#using api
+movie=GetMovie(api_key='d9bd45f5')
 
 #function for loading in data
 def load_data(data):
@@ -40,28 +42,7 @@ def recommend(movie_title,similarity,model_df,num_of_rec):
     result_df['similarity']=rec_sim
     return result_df.head(num_of_rec)
 
-#css templates for background and results
-page_bg_img = '''
-<style>
-.stApp {
-  background-image: url('https://www.bing.com/th?id=OIP.-_EYLAniPoYfSnSZHlgJXQHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.25&pid=3.1&rm=2',%s');
-  background-size: contain;
-}
-</style>
-'''
 
-RESULT_TEMP = """
-<div style="width:90%;height:100%;margin:1px;padding:5px;position:relative;border-radius:5px;border-bottom-right-radius: 80px;
-box-shadow:0 0 20px 5px #c000000; background-color:#db7093;
-  border-left: 5px solid #6c6c6c;">
-<h4>{}</h4>
-<p style="color:white;"><span style="color:black;">😃Type::</span>{}</p>
-<p style="color:white;"><span style="color:black;">📋Description:</span>{}</p>
-<p style="color:white;"><span style="color:black;">🎥Genres:</span>{}</p>
-<p style="color:white;"><span style="color:black;">📅Release Year:</span>{}</p>
-<p style="color:white;"><span style="color:black;">💯Imdb Rating:</span>{}</p>
-</div>
-"""
 
 #function to suggest other movies if query not in dataset
 @st.cache
@@ -76,8 +57,6 @@ def search_term_if_not_found(term,model_df=model_df):
 
 #main function
 def main():
-    st.markdown(page_bg_img, unsafe_allow_html=True)
-
     #title
     st.title('Netflix Recommender System Demo')
     menu=['Home','Recommend',"Visualizations",'About']
@@ -100,15 +79,12 @@ def main():
         st.subheader('Recommend Movies')
         num_of_rec = st.sidebar.number_input("Number",1,30)
         similarity=vectorize_cosine(model_df)
-        search_term=st.selectbox('Search Movie',model_df['title'])
+        search_term=st.selectbox('Search Movie',model_df['title'][1:])
         
         if st.button('Recommend'):
             if search_term!= None:
                 try:
                     result=recommend(search_term,similarity,model_df,num_of_rec=num_of_rec)
-                    with st.expander("Results as JSON"):
-                        results_json = result.to_dict('index')
-                        st.write(results_json)
 						
                     for row in result.iterrows():
                         rec_title = row[1][1]
@@ -118,7 +94,18 @@ def main():
                         rec_year = row[1][4]
                         rec_imdb = row[1][-3]
 
-                        stc.html(RESULT_TEMP.format(rec_title,rec_type,rec_desc,rec_gen,rec_year,rec_imdb),height=350)		
+                        movie_ttl=movie.get_movie(title=str(rec_title))
+                        col1,col2=st.columns([1,2])
+                        with col1:
+                            st.image(movie_ttl['poster'])
+                        with col2:
+                            st.subheader(movie_ttl['title'])
+                            st.caption(f"Genre: {rec_gen} \n ; Year: {rec_year} ")
+                            st.write(rec_desc)
+                            st.text(f"Imdb Rating: {rec_imdb}")
+                            st.progress(float(rec_imdb)/10)
+
+
                     
                 except :
                     result='Not in Database'
@@ -132,9 +119,18 @@ def main():
                         rec_gen  = row[1][7]
                         rec_year = row[1][4]
                         rec_imdb = row[1][-3]
+                        movie_ttl=movie.get_movie(title=str(rec_title))
+                        col1,col2=st.columns([1,2])
+                        with col1:
+                            st.image(movie_ttl['poster'])
+                        with col2:
+                            st.subheader(movie_ttl['title'])
+                            st.caption(f"Genre: {rec_gen} \n;  Year: {rec_year} ")
+                            st.write(rec_desc)
+                            st.text(f"Imdb Rating: {rec_imdb}")
+                            st.progress(float(rec_imdb)/10)
 
-                        stc.html(RESULT_TEMP.format(rec_title,rec_type,rec_desc,rec_gen,rec_year,rec_imdb),height=350)	
-                    st.dataframe(result_df)
+
     elif choice == "Visualizations":
         
         st.set_option('deprecation.showPyplotGlobalUse', False)
