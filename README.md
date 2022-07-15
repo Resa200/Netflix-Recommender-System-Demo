@@ -5,9 +5,12 @@ With the use of streamlit, scikit-learn,pandas and other python libraries; I was
 
 Data: Source - Kaggle - https://www.kaggle.com/datasets/victorsoeiro/netflix-tv-shows-and-movies 
 
-> main.py - contains the main python file deployed on streamlit
-> preprocessing.ipynb - contains the data cleaning process 
-> gen.csv- contains the value counts of genres in the data
-> pdt.csv-contains the value counts of production countries in the data
+main.py - contains the main python file deployed on streamlit
+
+preprocessing.ipynb - contains the data cleaning process
+
+gen.csv- contains the value counts of genres in the data
+
+pdt.csv-contains the value counts of production countries in the data
 
 Link to Deployed Streamlit App - https://resa200-netflix-recommender-system-demo-main-x70ukl.streamlitapp.com/
