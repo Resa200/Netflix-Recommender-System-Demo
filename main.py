@@ -69,7 +69,7 @@ def search_term_if_not_found(term,model_df=model_df):
     term=term.lower()
     result_df = model_df[model_df['title'].astype('str').apply(lambda x:x.lower()).str.contains(term)]
     if result_df.shape[0]==0:
-        st.info('Not in database')
+        #st.info('Not in database')
         result_df=model_df.head(10)
     return result_df
 
