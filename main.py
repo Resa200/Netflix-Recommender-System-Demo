@@ -73,6 +73,7 @@ def search_term_if_not_found(term,model_df=model_df):
         result_df=model_df.head(10)
     return result_df
 
+
 #main function
 def main():
     st.markdown(page_bg_img, unsafe_allow_html=True)
@@ -99,7 +100,8 @@ def main():
         st.subheader('Recommend Movies')
         num_of_rec = st.sidebar.number_input("Number",1,30)
         similarity=vectorize_cosine(model_df)
-        search_term=st.text_input('Search Movie')
+        search_term=st.selectbox('Search Movie',model_df['title'])
+        
         if st.button('Recommend'):
             if search_term!= None:
                 try:
