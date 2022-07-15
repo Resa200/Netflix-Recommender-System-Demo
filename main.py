@@ -92,7 +92,7 @@ def main():
         st.write(f"The data used to build this system contains exactly {model_df.shape[0]} unique movies and {model_df.shape[1]} features")
         st.markdown("""     The first 10 movies of the data are displayed below
         """)
-        st.dataframe(model_df.set_index('id').head(10))
+        st.dataframe(model_df.drop(columns='tags').set_index('id').head(10))
         st.write("The recommender system in the 'Recommend' Menu was built With the use of Tfidf Vectorizer and Cosine similarity")
 
     elif choice=='Recommend':
