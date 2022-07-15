@@ -59,7 +59,7 @@ box-shadow:0 0 20px 5px #c000000; background-color:#db7093;
 <p style="color:white;"><span style="color:black;">📋Description:</span>{}</p>
 <p style="color:white;"><span style="color:black;">🎥Genres:</span>{}</p>
 <p style="color:white;"><span style="color:black;">📅Release Year:</span>{}</p>
-<p style="color:white;"><span style="color:black;">💯Imdb Score:</span>{}</p>
+<p style="color:white;"><span style="color:black;">💯Imdb Rating:</span>{}</p>
 </div>
 """
 
@@ -110,9 +110,9 @@ def main():
 						
                     for row in result.iterrows():
                         rec_title = row[1][1]
-                        rec_type = row[1][2]
+                        rec_type = str(row[1][2]).title()
                         rec_desc = row[1][3]
-                        rec_gen  = row[1][7]
+                        rec_gen  = str(row[1][7]).title()
                         rec_year = row[1][4]
                         rec_imdb = row[1][-3]
 
