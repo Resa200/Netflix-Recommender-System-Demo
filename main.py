@@ -47,25 +47,16 @@ def recommend(movie_title,similarity,model_df,num_of_rec):
 def main():
     #title
     st.title('Netflix Recommender System Demo')
-    menu=['Home','Recommend',"Visualizations",'About']
+    menu=['Recommend','About']
 
     choice=st.sidebar.selectbox("Menu",menu)
    
     model_df=load_data('final_data.csv')
 
-    if choice=='Home':
-
-        st.subheader('Home')
-        st.write("This is a demo of a content based filtering recommender system with the documentation on github, explore!")
-        st.write(f"The data used to build this system contains exactly {model_df.shape[0]} unique movies and {model_df.shape[1]} features")
-        st.markdown("""     The first 10 movies of the data are displayed below
-        """)
-        st.dataframe(model_df.drop(columns='tags').set_index('id').head(10))
-        st.write("The recommender system in the 'Recommend' Menu was built With the use of Tfidf Vectorizer and Cosine similarity")
-
-    elif choice=='Recommend':
+   
+    if choice=='Recommend':
         st.subheader('Recommend Movies')
-        num_of_rec = st.sidebar.number_input("Number",1,30)
+        num_of_rec = st.sidebar.number_input("Number",5,30)
         similarity=vectorize_cosine(model_df)
         search_term=st.selectbox('Search Movie',model_df['title'][1:])
         
@@ -94,12 +85,18 @@ def main():
                                 st.text(f"Imdb Rating: {rec_imdb}")
                                 st.progress(float(rec_imdb)/10)
                         except:
-                            pass
-            
-
-
-    elif choice == "Visualizations":
+                            pass    
         
+
+    else:
+        st.subheader('About')
+        st.write("This is a demo of a content based filtering recommender system with the documentation on github, explore!")
+        st.write(f"The data used to build this system contains exactly {model_df.shape[0]} unique movies and {model_df.shape[1]} features")
+        st.markdown("""     The first 10 movies of the data are displayed below
+        """)
+        st.dataframe(model_df.drop(columns='tags').set_index('id').head(10))
+        st.write("The recommender system in the 'Recommend' Menu was built With the use of Tfidf Vectorizer and Cosine similarity")
+
         st.set_option('deprecation.showPyplotGlobalUse', False)
         #data visualizations
         st.subheader("Exploring Correlations")
@@ -153,8 +150,7 @@ def main():
         plt.title('Production countries count in dataset')
         st.pyplot(fig)
 
-    else:
-        st.subheader('About')
+
         st.text("Made with streamlit by Theresa Sunday(Resa200) on github")
 
 
