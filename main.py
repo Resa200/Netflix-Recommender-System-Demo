@@ -127,28 +127,28 @@ def main():
             
             st.pyplot(fig)
 
-        st.subheader('Distribution of categorical variables')
+        # st.subheader('Distribution of categorical variables')
 
-        for col in ['age_certification','seasons']:
-            fig=plt.figure(figsize=[12,6])
-            palette=sns.color_palette(n_colors=1)
-            sns.countplot(model_df[col],palette=palette)
-            plt.title(f"{col} distribution")
+        # for col in ['age_certification','seasons']:
+        #     fig=plt.figure(figsize=[12,6])
+        #     palette=sns.color_palette(n_colors=1)
+        #     sns.countplot(model_df[col],palette=palette)
+        #     plt.title(f"{col} distribution")
             
-            st.pyplot(fig)
+        #     st.pyplot(fig)
 
-        genre=load_data('gen.csv')
-        countries=load_data('pdt.csv').head(10)
+        # genre=load_data('gen.csv')
+        # countries=load_data('pdt.csv').head(10)
 
-        fig=plt.figure(figsize=[12,6])
-        sns.barplot(data=genre,x='counts',y='genre',palette=sns.color_palette(n_colors=1))
-        plt.title('Genres count in dataset')
-        st.pyplot(fig)
+        # fig=plt.figure(figsize=[12,6])
+        # sns.barplot(data=genre,x='counts',y='genre',palette=sns.color_palette(n_colors=1))
+        # plt.title('Genres count in dataset')
+        # st.pyplot(fig)
 
-        fig=plt.figure(figsize=[12,6])
-        sns.barplot(data=countries,x='counts',y='production_countries',palette=sns.color_palette(n_colors=1))
-        plt.title('Production countries count in dataset')
-        st.pyplot(fig)
+        # fig=plt.figure(figsize=[12,6])
+        # sns.barplot(data=countries,x='counts',y='production_countries',palette=sns.color_palette(n_colors=1))
+        # plt.title('Production countries count in dataset')
+        # st.pyplot(fig)
 
 
         st.text("Made with streamlit by Theresa Sunday(Resa200) on github")
